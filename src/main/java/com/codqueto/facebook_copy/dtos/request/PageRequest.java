@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 public class PageRequest {
 
     private String title;
-    private Long user_id;
+    private Long userId;
 }
