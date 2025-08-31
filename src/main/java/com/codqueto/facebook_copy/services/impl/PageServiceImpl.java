@@ -3,6 +3,7 @@ package com.codqueto.facebook_copy.services.impl;
 import com.codqueto.facebook_copy.dtos.request.PageRequest;
 import com.codqueto.facebook_copy.dtos.request.PostRequest;
 import com.codqueto.facebook_copy.dtos.response.PageResponse;
+import com.codqueto.facebook_copy.dtos.response.PostResponse;
 import com.codqueto.facebook_copy.entities.PageEntity;
 import com.codqueto.facebook_copy.repositories.PageRepository;
 import com.codqueto.facebook_copy.repositories.UserRepository;
@@ -10,13 +11,13 @@ import com.codqueto.facebook_copy.services.PageService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional(
@@ -50,17 +51,49 @@ public class PageServiceImpl implements PageService {
     }
 
     @Override
-    public PageResponse readByTitle(String title) {
-        return null;
+    public PageResponse findByTitle(String title) {
+        var pageEntity = pageRepository.findPageByTitle(title)
+                .orElseThrow(() -> new IllegalArgumentException("Title not found"));
+
+        final List<PostResponse> postResponses = pageEntity.getPosts().stream().map(post -> {
+            return PostResponse
+                    .builder()
+                    .img(post.getImg())
+                    .content(post.getContent())
+                    .dateCreation(post.getDateCreation())
+                    .build();
+
+        }).toList();
+        final var response = new PageResponse();
+        BeanUtils.copyProperties(pageEntity, response);
+        response.setPosts(postResponses);
+
+        return response;
     }
 
     @Override
     public PageResponse update(PageRequest page, String title) {
-        return null;
+
+        final var entityFromDB = pageRepository.findPageByTitle(title)
+                .orElseThrow(()-> new IllegalArgumentException("Page not found"));
+
+        entityFromDB.setTitle(page.getTitle());
+
+        final var pageUpdated = pageRepository.save(entityFromDB);
+
+        final var response = new PageResponse();
+        BeanUtils.copyProperties(pageUpdated, response);
+        return response;
     }
 
     @Override
     public void delete(String title) {
+        final var entityFromDB = pageRepository.findPageByTitle(title)
+                .orElseThrow(()-> new IllegalArgumentException("Page not found"));
+
+        System.out.println(entityFromDB.getPosts());
+        pageRepository.delete(entityFromDB);
+//        pageRepository.deleteById(entityFromDB.getId());
 
     }
 

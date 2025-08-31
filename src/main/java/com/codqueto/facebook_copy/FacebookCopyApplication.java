@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootApplication
 public class FacebookCopyApplication implements CommandLineRunner {
@@ -19,15 +20,7 @@ public class FacebookCopyApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		PageRequest req = PageRequest.builder()
-				.userId(4L)
-				.title("Testing")
-				.build();
-
-		var res = pageService.create(req);
-
-		System.out.println(res);
-
+		pageService.delete("User3 Page");
 
 	}
 }

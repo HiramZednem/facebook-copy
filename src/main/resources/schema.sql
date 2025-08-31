@@ -1,5 +1,5 @@
 -- Crear esquema
-CREATE TABLE AppUser (
+CREATE TABLE App_User (
                          id INT AUTO_INCREMENT PRIMARY KEY,
                          name VARCHAR(255),
                          age INT,
@@ -12,7 +12,7 @@ CREATE TABLE Page (
                       date_creation TIMESTAMP,
                       title VARCHAR(255) UNIQUE,
                       id_User INT UNIQUE,
-                      FOREIGN KEY (id_User) REFERENCES AppUser(id)
+                      FOREIGN KEY (id_User) REFERENCES App_User(id)
 );
 
 CREATE TABLE Post (
@@ -22,4 +22,5 @@ CREATE TABLE Post (
                       img VARCHAR(255),
                       id_page INT,
                       FOREIGN KEY (id_page) REFERENCES Page(id)
+                      ON DELETE  CASCADE
 );

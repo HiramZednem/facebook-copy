@@ -32,12 +32,12 @@ public class PageEntity {
 
     private LocalDateTime dateCreation;
 
-    @OneToOne()
+    @OneToOne(mappedBy = "page", cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "id_User", unique = true)
     private UserEntity user;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "id_page")
+    @JoinColumn(name = "id_User", unique = true)  //FK
     private List<PostEntity> posts = new ArrayList<>();
 
     public void addPost(PostEntity post) {
