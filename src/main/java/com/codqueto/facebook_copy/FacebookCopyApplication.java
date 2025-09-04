@@ -21,6 +21,7 @@ public class FacebookCopyApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		pageService.delete("User3 Page");
+//		pageService.findByTitle("User3 Page");
 
 	}
 }

@@ -52,7 +52,7 @@ public class PageServiceImpl implements PageService {
 
     @Override
     public PageResponse findByTitle(String title) {
-        var pageEntity = pageRepository.findPageByTitle(title)
+        var pageEntity = pageRepository.findByTitle(title)
                 .orElseThrow(() -> new IllegalArgumentException("Title not found"));
 
         final List<PostResponse> postResponses = pageEntity.getPosts().stream().map(post -> {
@@ -74,7 +74,7 @@ public class PageServiceImpl implements PageService {
     @Override
     public PageResponse update(PageRequest page, String title) {
 
-        final var entityFromDB = pageRepository.findPageByTitle(title)
+        final var entityFromDB = pageRepository.findByTitle(title)
                 .orElseThrow(()-> new IllegalArgumentException("Page not found"));
 
         entityFromDB.setTitle(page.getTitle());
@@ -88,11 +88,13 @@ public class PageServiceImpl implements PageService {
 
     @Override
     public void delete(String title) {
-        final var entityFromDB = pageRepository.findPageByTitle(title)
+        final var entityFromDB = pageRepository.findByTitle(title)
                 .orElseThrow(()-> new IllegalArgumentException("Page not found"));
 
-        System.out.println(entityFromDB.getPosts());
-        pageRepository.delete(entityFromDB);
+        if(pageRepository.existsByTitle(title)) {
+            pageRepository.deleteByTitle(entityFromDB.getTitle());
+        }
+//        pageRepository.delete(entityFromDB);
 //        pageRepository.deleteById(entityFromDB.getId());
 
     }

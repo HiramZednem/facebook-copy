@@ -13,6 +13,7 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ import java.util.List;
 @Table(name = "Page")
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 @Data
 public class PageEntity {
     @Id
@@ -32,12 +34,14 @@ public class PageEntity {
 
     private LocalDateTime dateCreation;
 
-    @OneToOne(mappedBy = "page", cascade = CascadeType.ALL, orphanRemoval = true)
+//    @OneToOne
+//    @JoinColumn(name = "id_User", unique = true)
+    @OneToOne
     @JoinColumn(name = "id_User", unique = true)
     private UserEntity user;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "id_User", unique = true)  //FK
+    @JoinColumn(name = "id_page")  //FK
     private List<PostEntity> posts = new ArrayList<>();
 
     public void addPost(PostEntity post) {
