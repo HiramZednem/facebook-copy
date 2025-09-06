@@ -9,19 +9,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootApplication
-public class FacebookCopyApplication implements CommandLineRunner {
-
-	@Autowired
-	PageService pageService;
+public class FacebookCopyApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(FacebookCopyApplication.class, args);
-	}
-
-	@Override
-	public void run(String... args) throws Exception {
-		pageService.delete("User3 Page");
-//		pageService.findByTitle("User3 Page");
-
 	}
 }
