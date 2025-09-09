@@ -44,9 +44,10 @@ public class PageController {
     @PutMapping(path = "{title}")
     public ResponseEntity<PageResponse> updatePage(
             @PathVariable String title,
-            @RequestBody PageRequest page
+            @RequestBody PageRequest request
     ) {
-        return ResponseEntity.ok(pageService.update(page, title));
+        request.setTitle(this.normalizeTitle(request.getTitle()));
+        return ResponseEntity.ok(pageService.update(request, title));
 
     }
 

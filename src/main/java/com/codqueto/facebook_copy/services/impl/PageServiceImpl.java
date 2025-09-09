@@ -5,6 +5,7 @@ import com.codqueto.facebook_copy.dtos.request.PostRequest;
 import com.codqueto.facebook_copy.dtos.response.PageResponse;
 import com.codqueto.facebook_copy.dtos.response.PostResponse;
 import com.codqueto.facebook_copy.entities.PageEntity;
+import com.codqueto.facebook_copy.exceptions.TitleNotValidException;
 import com.codqueto.facebook_copy.repositories.PageRepository;
 import com.codqueto.facebook_copy.repositories.UserRepository;
 import com.codqueto.facebook_copy.services.PageService;
@@ -15,9 +16,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 @Transactional(
@@ -25,16 +27,29 @@ import java.util.List;
         isolation = Isolation.READ_COMMITTED
 )
 @Slf4j
-@AllArgsConstructor
 public class PageServiceImpl implements PageService {
 
     private final PageRepository pageRepository;
     private final UserRepository userRepository;
+    private final HashSet<String> badWords = new HashSet<>();
+
+    public PageServiceImpl(PageRepository pageRepository, UserRepository userRepository) throws FileNotFoundException {
+        this.pageRepository = pageRepository;
+        this.userRepository = userRepository;
+
+        Scanner s = new Scanner(new File("src/main/resources/bad-words.txt"));
+
+        while (s.hasNextLine()) {
+            badWords.add(s.nextLine());
+        }
+    }
 
     @Override
     public PageResponse create(PageRequest page) {
         final var entity = new PageEntity();
         BeanUtils.copyProperties(page, entity);
+
+        this.validateTitle(entity.getTitle());
 
         final var user = userRepository.findById(page.getUserId())
                         .orElseThrow();
@@ -77,6 +92,8 @@ public class PageServiceImpl implements PageService {
         final var entityFromDB = pageRepository.findByTitle(title)
                 .orElseThrow(()-> new IllegalArgumentException("Page not found"));
 
+        this.validateTitle(page.getTitle());
+
         entityFromDB.setTitle(page.getTitle());
 
         final var pageUpdated = pageRepository.save(entityFromDB);
@@ -107,5 +124,17 @@ public class PageServiceImpl implements PageService {
     @Override
     public PageResponse deletePost(Long idPost) {
         return null;
+    }
+
+    private void validateTitle(String title) {
+        if (title.isEmpty()) {
+            throw new TitleNotValidException("Title cannot be empty");
+        }
+
+        Arrays.stream(title.trim().split("-")).forEach(word -> {
+            if (badWords.contains(word)) {
+                throw new TitleNotValidException("The title can't contain bad words");
+            }
+        });
     }
 }
