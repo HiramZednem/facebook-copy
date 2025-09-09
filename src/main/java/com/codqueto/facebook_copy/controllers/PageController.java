@@ -1,6 +1,7 @@
 package com.codqueto.facebook_copy.controllers;
 
 import com.codqueto.facebook_copy.dtos.request.PageRequest;
+import com.codqueto.facebook_copy.dtos.request.PostRequest;
 import com.codqueto.facebook_copy.dtos.response.PageResponse;
 import com.codqueto.facebook_copy.entities.PageEntity;
 import com.codqueto.facebook_copy.services.PageService;
@@ -56,6 +57,15 @@ public class PageController {
         this.pageService.delete(title);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping(value = "{title}/post")
+    public ResponseEntity<PageResponse> createPost(
+            @PathVariable String title,
+            @RequestBody PostRequest request
+    ) {
+       return ResponseEntity.ok(pageService.createPost(request, title));
+    }
+
 
     private String normalizeTitle(String title) {
         if (title.contains(" ")) {

@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 @ToString
 public class PostEntity {
     @Id
-    @GeneratedValue( strategy = GenerationType.AUTO)
+    @GeneratedValue( strategy = GenerationType.IDENTITY)
     private long id;
 
     private LocalDateTime dateCreation;

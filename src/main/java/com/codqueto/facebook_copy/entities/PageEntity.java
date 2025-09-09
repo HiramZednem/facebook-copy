@@ -34,8 +34,6 @@ public class PageEntity {
 
     private LocalDateTime dateCreation;
 
-//    @OneToOne
-//    @JoinColumn(name = "id_User", unique = true)
     @OneToOne
     @JoinColumn(name = "id_User", unique = true)
     private UserEntity user;

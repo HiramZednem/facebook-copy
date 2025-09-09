@@ -5,6 +5,7 @@ import com.codqueto.facebook_copy.dtos.request.PostRequest;
 import com.codqueto.facebook_copy.dtos.response.PageResponse;
 import com.codqueto.facebook_copy.dtos.response.PostResponse;
 import com.codqueto.facebook_copy.entities.PageEntity;
+import com.codqueto.facebook_copy.entities.PostEntity;
 import com.codqueto.facebook_copy.exceptions.TitleNotValidException;
 import com.codqueto.facebook_copy.repositories.PageRepository;
 import com.codqueto.facebook_copy.repositories.UserRepository;
@@ -23,8 +24,8 @@ import java.util.*;
 
 @Service
 @Transactional(
-        noRollbackFor = Exception.class,
-        isolation = Isolation.READ_COMMITTED
+//        noRollbackFor = Exception.class,
+//        isolation = Isolation.READ_COMMITTED
 )
 @Slf4j
 public class PageServiceImpl implements PageService {
@@ -117,8 +118,34 @@ public class PageServiceImpl implements PageService {
     }
 
     @Override
-    public PageResponse createPost(PostRequest post) {
-        return null;
+    public PageResponse createPost(PostRequest post, String title) {
+        final var pageToUpdate = pageRepository.findByTitle(title)
+                .orElseThrow(()-> new IllegalArgumentException("Page not found"));
+
+        PostEntity postEntity = new PostEntity();
+
+        BeanUtils.copyProperties(post, postEntity);
+        postEntity.setDateCreation(LocalDateTime.now());
+        pageToUpdate.addPost(postEntity);
+
+        final PageEntity pageUpdated= this.pageRepository.save(pageToUpdate);
+
+        final PageResponse response = new PageResponse();
+        BeanUtils.copyProperties(pageUpdated, response);
+
+        final List<PostResponse> postResponses = pageUpdated.getPosts().stream().map(p -> {
+            return PostResponse
+                    .builder()
+                    .img(p.getImg())
+                    .content(p.getContent())
+                    .dateCreation(p.getDateCreation())
+                    .build();
+
+        }).toList();
+
+        response.setPosts(postResponses);
+
+        return response;
     }
 
     @Override
