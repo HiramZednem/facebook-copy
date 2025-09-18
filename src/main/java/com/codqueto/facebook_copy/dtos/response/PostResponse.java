@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Builder
 public class PostResponse {
     private LocalDateTime dateCreation;
+    private Long id;
     private String content;
     private String img;
 }

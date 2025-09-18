@@ -7,16 +7,15 @@ import com.codqueto.facebook_copy.entities.PageEntity;
 import com.codqueto.facebook_copy.services.PageService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @RestController
 @RequestMapping(path = "page")
@@ -53,7 +52,7 @@ public class PageController {
     }
 
     @DeleteMapping(path = "{title}")
-    public ResponseEntity<?> deletePage(@PathVariable String title) {
+    public ResponseEntity<Void> deletePage(@PathVariable String title) {
         this.pageService.delete(title);
         return ResponseEntity.noContent().build();
     }
@@ -66,6 +65,37 @@ public class PageController {
        return ResponseEntity.ok(pageService.createPost(request, title));
     }
 
+    @DeleteMapping(path = "{title}/post/{id}")
+    public ResponseEntity<Void> deletePost (
+        @PathVariable String title,
+        @PathVariable Long id
+    ) {
+       this.pageService.deletePost(id, title);
+       return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping(path = "img/upload")
+    public ResponseEntity<String> uploadImage(
+            @RequestParam(value = "file") MultipartFile file
+    ) {
+        try {
+
+            String pathUrl = "C:\\Users\\hculebro\\Documents\\learning\\facebook-copy\\src\\main\\resources\\static\\img";
+            Path path = Paths.get(pathUrl);
+            if (!Files.exists(path)) {
+                Files.createDirectory(path);
+            }
+
+            final var destination = new File(pathUrl);
+            file.transferTo(destination);
+
+            return ResponseEntity.ok().body("Img uploaded successfully");
+        }catch (IOException e) {
+            return ResponseEntity.internalServerError().body("Can not upload the image");
+        }
+
+
+    }
 
     private String normalizeTitle(String title) {
         if (title.contains(" ")) {

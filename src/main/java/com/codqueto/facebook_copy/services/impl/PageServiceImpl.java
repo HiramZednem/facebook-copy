@@ -77,6 +77,7 @@ public class PageServiceImpl implements PageService {
                     .img(post.getImg())
                     .content(post.getContent())
                     .dateCreation(post.getDateCreation())
+                    .id(post.getId())
                     .build();
 
         }).toList();
@@ -139,6 +140,7 @@ public class PageServiceImpl implements PageService {
                     .img(p.getImg())
                     .content(p.getContent())
                     .dateCreation(p.getDateCreation())
+                    .id(p.getId())
                     .build();
 
         }).toList();
@@ -149,8 +151,19 @@ public class PageServiceImpl implements PageService {
     }
 
     @Override
-    public PageResponse deletePost(Long idPost) {
-        return null;
+    public void deletePost(Long idPost, String title) {
+        final PageEntity pageToUpdate = this.pageRepository.findByTitle(title)
+                .orElseThrow( () -> new IllegalArgumentException("Page not found"));
+
+        final PostEntity postTodelete = pageToUpdate.getPosts()
+                .stream()
+                .filter( post ->  post.getId() == idPost)
+                .findFirst()
+                .orElseThrow( () -> new IllegalArgumentException("Post not found") );
+
+        pageToUpdate.removePost(postTodelete);
+
+        this.pageRepository.save(pageToUpdate);
     }
 
     private void validateTitle(String title) {
