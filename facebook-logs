@@ -135,3 +135,43 @@ Fix this pattern in your application or switch to the legacy parser implementati
 2025-09-17T22:04:04.126-06:00  INFO 7628 --- [facebook-copy] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
 2025-09-17T22:04:04.126-06:00  INFO 7628 --- [facebook-copy] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
 2025-09-17T22:04:35.035-06:00  WARN 7628 --- [facebook-copy] [http-nio-8080-exec-6] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [java.lang.IllegalArgumentException: Title not found]
+2025-09-17T22:35:44.624-06:00  INFO 7628 --- [facebook-copy] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-09-17T22:35:44.631-06:00  INFO 7628 --- [facebook-copy] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-09-17T22:35:44.635-06:00  INFO 7628 --- [facebook-copy] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-09-17T22:35:44.640-06:00  WARN 7628 --- [facebook-copy] [SpringApplicationShutdownHook] o.s.b.f.support.DisposableBeanAdapter    : Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-232]
+2025-09-17T22:35:44.640-06:00  INFO 7628 --- [facebook-copy] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-09-17T22:35:44.641-06:00  INFO 7628 --- [facebook-copy] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-09-17T22:35:57.310-06:00  INFO 31868 --- [facebook-copy] [restartedMain] c.c.f.FacebookCopyApplication            : Starting FacebookCopyApplication using Java 21.0.8 with PID 31868 (C:\Users\hculebro\Documents\learning\facebook-copy\target\classes started by hculebro in C:\Users\hculebro\Documents\learning\facebook-copy)
+2025-09-17T22:35:57.311-06:00  INFO 31868 --- [facebook-copy] [restartedMain] c.c.f.FacebookCopyApplication            : No active profile set, falling back to 1 default profile: "default"
+2025-09-17T22:35:57.349-06:00  INFO 31868 --- [facebook-copy] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-09-17T22:35:57.349-06:00  INFO 31868 --- [facebook-copy] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-09-17T22:35:57.706-06:00  WARN 31868 --- [facebook-copy] [restartedMain] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.parsing.BeanDefinitionParsingException: Configuration problem: @Bean method 'userDetailsService' must not be declared as autowired; remove the method-level @Autowired annotation.
+Offending resource: class path resource [com/codqueto/facebook_copy/config/SecurityConfig.class]
+2025-09-17T22:35:57.710-06:00  INFO 31868 --- [facebook-copy] [restartedMain] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-09-17T22:35:57.726-06:00 ERROR 31868 --- [facebook-copy] [restartedMain] o.s.boot.SpringApplication               : Application run failed
+
+org.springframework.beans.factory.parsing.BeanDefinitionParsingException: Configuration problem: @Bean method 'userDetailsService' must not be declared as autowired; remove the method-level @Autowired annotation.
+Offending resource: class path resource [com/codqueto/facebook_copy/config/SecurityConfig.class]
+	at org.springframework.beans.factory.parsing.FailFastProblemReporter.error(FailFastProblemReporter.java:72) ~[spring-beans-6.2.9.jar:6.2.9]
+	at org.springframework.context.annotation.BeanMethod.validate(BeanMethod.java:52) ~[spring-context-6.2.9.jar:6.2.9]
+	at org.springframework.context.annotation.ConfigurationClass.validate(ConfigurationClass.java:243) ~[spring-context-6.2.9.jar:6.2.9]
+	at org.springframework.context.annotation.ConfigurationClassParser.validate(ConfigurationClassParser.java:228) ~[spring-context-6.2.9.jar:6.2.9]
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.processConfigBeanDefinitions(ConfigurationClassPostProcessor.java:419) ~[spring-context-6.2.9.jar:6.2.9]
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.postProcessBeanDefinitionRegistry(ConfigurationClassPostProcessor.java:290) ~[spring-context-6.2.9.jar:6.2.9]
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanDefinitionRegistryPostProcessors(PostProcessorRegistrationDelegate.java:349) ~[spring-context-6.2.9.jar:6.2.9]
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(PostProcessorRegistrationDelegate.java:118) ~[spring-context-6.2.9.jar:6.2.9]
+	at org.springframework.context.support.AbstractApplicationContext.invokeBeanFactoryPostProcessors(AbstractApplicationContext.java:791) ~[spring-context-6.2.9.jar:6.2.9]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:609) ~[spring-context-6.2.9.jar:6.2.9]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146) ~[spring-boot-3.5.4.jar:3.5.4]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752) ~[spring-boot-3.5.4.jar:3.5.4]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439) ~[spring-boot-3.5.4.jar:3.5.4]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318) ~[spring-boot-3.5.4.jar:3.5.4]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1361) ~[spring-boot-3.5.4.jar:3.5.4]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1350) ~[spring-boot-3.5.4.jar:3.5.4]
+	at com.codqueto.facebook_copy.FacebookCopyApplication.main(FacebookCopyApplication.java:15) ~[classes/:na]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:50) ~[spring-boot-devtools-3.5.4.jar:3.5.4]
+
